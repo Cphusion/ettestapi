@@ -1,0 +1,247 @@
+FORMAT: 1A
+HOST: http://www.google.com
+
+# ETMC Comments
+Comments API is a service that performs CRUD on comments.
+
+# Group Comments Resources
+
+Comments related resources of the **Comments API**
+
+## Comments Collection [/hub-internal/v1/comments{?category1,category2,category3,objectid,addressed,completed}]
+This API returns all comments that meet the filter criteria.
+
+**NOTE: At least one of the following parameters must be specified, or the API will not return results: category1, category2, category3, objectid**
+
++ Parameters
+    + category1 (optional, string)
+    + category2 (optional, string)
+    + category3 (optional, string)
+    + objectid (optional, string)
+    + addressed (optional, number) ... If not set, does not filter by addressed-or-not. If set to `1`, then returns only those comments that are addressed. If set to something else, then returns only those comments that are not addressed.
+    + completed (optional, number) ... If not set, does not filter by completed-or-not. If set to `1`, then returns only those comments that are completed. If set to something else, then returns only those comments that are not completed.
+
+### List all Comments [GET]
++ Response 200 (application/json)
+
+        [{
+            "_links": {
+                "self": { "href": "/comments?page=2&pageSize=3" },
+                "next": { "href": "/comments?page=1&pageSize=3" },
+                "prev": { "href": "/comments?page=3&pageSize=3" }
+            },        
+            "count": 2,
+            "page": 1,
+            "pageSize": 10,
+            "entries": [
+                {
+                  "id": 123456,
+                  "createdDate": "2014-05-01T16:20:02",
+                  "lastUpdated": "2014-05-01T16:26:31",
+                  "createdBy": "10654823",
+                  "commentVersion": 1,
+                  "category1": "CampaignApproval-V2",
+                  "category2": "5096",
+                  "category3": "EmailComments:Round=1",
+                  "objectId": "25416",
+                  "commentText": "Comment 1",
+                  "childCommentCount": 0,
+                  "ordinal": 1,
+                  "x": "0.36833333333333335",
+                  "y": "0.7341772151898734",
+                  "isActive": true,
+                  "createdByUserName": "John Smith",
+                  "modifiedByUserName": "John Smith"
+                },
+                {
+                  "id": 123457,
+                  "createdDate": "2014-05-01T16:20:02",
+                  "lastUpdated": "2014-05-01T16:26:31",
+                  "createdBy": "10654823",
+                  "commentVersion": 1,
+                  "category1": "CampaignApproval-V2",
+                  "category2": "5096",
+                  "category3": "EmailComments:Round=1",
+                  "objectId": "25416",
+                  "commentText": "Comment 2",
+                  "childCommentCount": 3,
+                  "ordinal": 1,
+                  "x": "0.36833333333333335",
+                  "y": "0.7341772151898734",
+                  "isActive": true,
+                  "createdByUserName": "John Smith",
+                  "modifiedByUserName": "John Smith"
+                }]
+        }]
+
+## Comment [/hub-internal/v1/comments/]
+
+A single Comment object with all its details
+
+### Create a Comment [POST]
++ Request (application/json)
+
+        {
+          "category1": "CampaignApproval-V2",
+          "category2": "5096",
+          "category3": "EmailComments:Round=1",
+          "objectId": "25416",
+          "commentText": "Create a comment (post)",
+          "ordinal": 0,
+          "x": "0.16666666666666666",
+          "y": "0.16877637130801687"
+        }
+        
++ Response 201 (application/json)
+
+        {
+          "id": 123456,
+          "owner": "https://mc.s1.qa1.exacttarget.com/rest//beta/organization/10652396",
+          "createdDate": "2014-05-01T16:20:02",
+          "lastUpdated": "2014-05-01T16:26:31",
+          "createdBy": "10654823",
+          "commentVersion": 1,
+          "category1": "CampaignApproval-V2",
+          "category2": "5096",
+          "category3": "EmailComments:Round=1",
+          "objectId": "25416",
+          "commentText": "Create a comment (post)",
+          "childCommentCount": 0,
+          "commentVersion": 0,
+          "ordinal": 0,
+          "x": "0.16666666666666666",
+          "y": "0.16877637130801687"
+          "isActive": true,
+          "createdByUserName": "John Smith",
+          "modifiedByUserName": "John Smith",
+        "childComments": []
+        }
+
+## Comment [/hub-internal/v1/comments/{id}]
+
+A single Comment object with all its details
+
++ Parameters
+    + id (required, number, `123456`) ... number `id` of the Comment to perform action with. Has example value.
+
+### Retrieve a Comment [GET]
++ Response 200 (application/json)
+
+          {
+              "id": 123456,
+              "createdDate": "2014-05-02T12:52:16",
+              "lastUpdated": "2014-05-02T12:59:20",
+              "createdBy": "10654823",
+              "commentVersion": 3,
+              "category1": "CampaignApproval-V2",
+              "category2": "5096",
+              "category3": "EmailComments:Round=1",
+              "objectId": "25416",
+              "commentText": "Comment (Get)",
+              "ordinal": 2,
+              "x": "0.27166666666666667",
+              "y": "0.25316455696202533",
+              "isActive": true,
+              "createdByUserName": "John Smith",
+              "modifiedByUserName": "John Smith",
+              "childCommentCount": 2,
+              "childComments" :
+                [{
+                  "id": 11,
+                  "lastUpdated": "2014-05-02T12:52:16",
+                  "commentVersion": 0,
+                  "commentText": "Child comment 1",
+                  "isActive": true,
+                  "modifiedByUserName": "John Smith",
+                  "parentId": 12345
+                },
+                {
+                  "id": 22,
+                  "lastUpdated": "2014-05-02T12:52:16",
+                  "commentVersion": 0,
+                  "commentText": "Child comment 2",
+                  "isActive": true,
+                  "modifiedByUserName": "John Smith",
+                  "parentId": 12345
+                  }]
+            }
+
+### Update a Comment [PATCH]
+
+Update a Comment object
+
++ Request (application/json)
+    + Body
+    
+            {
+              "category1": "CampaignApproval-V2",
+              "category2": "5096",
+              "category3": "EmailComments:Round=1",
+              "objectId": "25416",
+              "commentText": "add comment\nsadfasdf",
+              "ordinal": 2,
+              "x": "0.27166666666666667",
+              "y": "0.25316455696202533"
+            }
+
++ Response 200
+    + Body
+
+            {
+              "id": 12345,
+              "createdDate": "2014-05-02T12:52:16",
+              "lastUpdated": "2014-05-02T12:52:16",
+              "createdBy": "10654823",
+              "commentVersion": 0,
+              "category1": "CampaignApproval-V2",
+              "category2": "5096",
+              "category3": "EmailComments:Round=1",
+              "objectId": "25416",
+              "commentText": "add comment\nsadfasdf",
+              "ordinal": 2,
+              "x": "0.27166666666666667",
+              "y": "0.25316455696202533",
+              "isActive": true,
+              "createdByUserName": "John Smith",
+              "modifiedByUserName": "John Smith" 
+            }
+            
+### Remove a Comment [DELETE]
+
+Removes a Comment object
+
++ Response 204
+
+## ChildComment [/hub-internal/v1/comments/{id}/children/]
+
+A single ChildComment object with all its details
+
++ Parameters
+    + id (required, number, `123456`) ... number `id` of the Comment to perform action with. Has example value.
+
+### Create a ChildComment [POST]
+
+Create a ChildComment
+
++ Request (application/json)
+
+        {
+          "commentText": "New child comment"
+        }
+        
++ Response 201 (application/json)
+
+        {
+          "id": 123555,
+          "createdDate": "2014-05-02T12:52:16",
+          "lastUpdated": "2014-05-02T12:52:16",
+          "createdBy": "10654823",
+          "commentVersion": 0,
+          "objectId": "25416",
+          "commentText": "New child comment",
+          "ordinal": 2,
+          "isActive": true,
+          "createdByUserName": "John Smith",
+          "modifiedByUserName": "John Smith",
+          "parentId": 123456
+        }
